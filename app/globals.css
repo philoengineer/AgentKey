@@ -1,12 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('/ma.css');
 
 body {
   margin: 0;
   padding: 0;
-  background: #080c12;
+  background: var(--ma-bg);
+  color: var(--ma-fg);
 }
