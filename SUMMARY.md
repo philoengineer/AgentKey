@@ -1,8 +1,8 @@
-# AgentKey — Project Summary, Capabilities & Roadmap
+# Writ — Project Summary, Capabilities & Roadmap
 
 ## Context
 
-AgentKey is a World Mini App that lets verified humans delegate scoped, time-limited, revocable credentials to AI agents. It runs inside World App's WebView via the MiniKit SDK and uses World's tiered identity verification (wallet, device, passport, orb) as the trust foundation for what agents are allowed to do.
+Writ is a World Mini App that lets verified humans delegate scoped, time-limited, revocable credentials to AI agents. It runs inside World App's WebView via the MiniKit SDK and uses World's tiered identity verification (wallet, device, passport, orb) as the trust foundation for what agents are allowed to do.
 
 The app is currently a **fully interactive UI prototype** — all flows work end-to-end in the browser, but everything is client-side simulation. No backend, no persistence, no real World verification yet.
 
@@ -15,11 +15,12 @@ The app is currently a **fully interactive UI prototype** — all flows work end
 ### Core Files
 | File | Lines | Purpose |
 |---|---|---|
-| `agentkey.jsx` | ~910 | Entire app: state, logic, UI |
+| `writ.jsx` | ~910 | Entire app: state, logic, UI |
 | `public/ma.css` | ~860 | Ma (間) design system |
-| `app/layout.jsx` | 22 | Root layout + MiniKit install |
-| `app/page.jsx` | 11 | Client-side render guard |
-| `app/globals.css` | 10 | Font imports + CSS variable wiring |
+| `app/layout.jsx` | — | Server-side root layout + metadata |
+| `app/providers.jsx` | — | Client-side MiniKitProvider wrapper |
+| `app/page.jsx` | — | World App gate + client render |
+| `app/globals.css` | — | Font imports + CSS variable wiring |
 | `package.json` | — | Next.js 15, React 19, MiniKit SDK |
 
 ### Identity & Trust System

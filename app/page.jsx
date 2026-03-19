@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import AgentKey from '../agentkey';
+import Writ from '../writ';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -35,7 +35,7 @@ export default function Home() {
           fontFamily: 'var(--ma-font-sans)',
         }}>
           <span>
-            <span style={{ color: 'var(--ma-fg)', fontWeight: 500 }}>AgentKey</span>
+            <span style={{ color: 'var(--ma-fg)', fontWeight: 500 }}>Writ</span>
             {' '}is a World Mini App. Open it in{' '}
             <span style={{ color: 'var(--ma-fg)', fontWeight: 500 }}>World App</span>
             {' '}for full functionality — verification and signing are simulated in browser.
@@ -59,7 +59,7 @@ export default function Home() {
           </a>
         </div>
       )}
-      <AgentKey />
+      <Writ />
     </>
   );
 }

@@ -1,9 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
 @import url('/ma.css');
 
+html,
 body {
   margin: 0;
   padding: 0;
   background: var(--ma-bg);
   color: var(--ma-fg);
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }

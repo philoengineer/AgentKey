@@ -153,7 +153,7 @@ function DayPicker({value,onChange}){
 //  MAIN APP
 // ═══════════════════════════════════════════════════════════════
 
-export default function AgentKey() {
+export default function Writ() {
   // ── Navigation ──
   var [tab,setTab]=useState("home");
   var [subView,setSub]=useState(null);
@@ -911,7 +911,7 @@ export default function AgentKey() {
     {/* App bar */}
     <div className="ma-app-bar">
       <div className="ma-app-bar-left">
-        <span className="ma-app-bar-title">AgentKey</span>
+        <span className="ma-app-bar-title">Writ</span>
         <Pill className="ma-badge--sm">BETA</Pill>
       </div>
       <div className="ma-row ma-gap-xs">
