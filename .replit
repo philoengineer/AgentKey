@@ -37,3 +37,8 @@ externalPort = 80
 
 [userenv.shared]
 NEXT_PUBLIC_APP_ID = "app_ee9a209d1114c68e0e28cf982efd927a"
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["npm", "run", "start"]
+build = ["npm", "run", "build"]
