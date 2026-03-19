@@ -101,17 +101,19 @@ Every grant carries: verification stack, trust score, scopes, full constraint se
 ## Roadmap
 
 ### Phase 1 — Persistence & Polish (make the demo real enough to share)
-- [ ] **localStorage persistence** — grants, verifications, vouches, audit logs survive refresh
-- [ ] **Dark mode preference** — persist toggle choice in localStorage
-- [ ] **Error states** — handle edge cases (expired mid-session, constraint conflicts)
+- [x] **localStorage persistence** — grants, verifications, vouches, audit logs survive refresh
+- [x] **Dark mode preference** — persist toggle choice in localStorage
+- [x] **Error states** — expired grant detection, constraint conflict warnings in review
 - [ ] **Responsive polish** — test on actual mobile viewport sizes
 - [ ] **Loading states** — skeleton screens for initial load
 
 ### Phase 2 — Deploy & Integrate (get it running in World App)
-- [ ] **Vercel deployment** — `vercel.json`, environment config, public URL
+- [x] **MiniKitProvider refactor** — server-side root layout + client-side providers.jsx; proper SDK initialization
+- [x] **World App gate** — `MiniKit.isInstalled()` check; browser shows "Open in World App" banner
+- [ ] **Deploy to Replit** — public URL via Replit deployment for World Developer Portal registration
 - [ ] **Real MiniKit verification** — replace `doVerify` simulation with actual SDK calls (`MiniKit.commandsAsync.verify`, `MiniKit.commandsAsync.walletAuth`)
 - [ ] **World Developer Portal** — register as Mini App, get app ID
-- [ ] **Environment config** — `.env.example` with `WORLD_APP_ID`, `WORLD_ACTION_ID`
+- [ ] **Environment config** — `.env.example` with `NEXT_PUBLIC_APP_ID`, `WORLD_ACTION_ID`
 
 ### Phase 3 — Backend & Security (make it production-grade)
 - [ ] **API routes** — `/api/grants` (CRUD), `/api/verify` (World verification callback), `/api/vouches`
@@ -119,6 +121,7 @@ Every grant carries: verification stack, trust score, scopes, full constraint se
 - [ ] **Real cryptographic signatures** — `viem` for grant signing, signature validation
 - [ ] **Server-side constraint enforcement** — time windows, spending caps, allowlists validated server-side
 - [ ] **Session management** — wallet-based auth, session tokens
+- [ ] **MPP integration** — use Machine Payments Protocol (mpp.dev) as the execution layer for `pay:transfer` and `tx:contract` scopes. AgentKey enforces spending caps and allowlists client-side before MPP fulfills the 402 payment challenge; HITL approvals pause the agent before credential retry; MPP receipts replace simulated grant signatures with cryptographic proof of delivery.
 
 ### Phase 4 — Advanced Features (from the PRD)
 - [ ] **On-chain grant registry** — anchor grant hashes on-chain for verifiability
