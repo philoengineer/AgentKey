@@ -153,6 +153,12 @@ export default function AgentKey() {
   // ── Navigation ──
   var [tab,setTab]=useState("home");
   var [subView,setSub]=useState(null);
+  var [darkMode,setDarkMode]=useState(false);
+
+  // ── Theme toggle ──
+  useEffect(()=>{
+    document.documentElement.classList.toggle("ma-dark",darkMode);
+  },[darkMode]);
 
   // ── User state ──
   var [achieved,setAchieved]=useState(["wallet"]);
@@ -873,7 +879,10 @@ export default function AgentKey() {
         <span className="ma-app-bar-title">AgentKey</span>
         <Pill className="ma-badge--sm">BETA</Pill>
       </div>
-      <Pill variant={totalScore>=60?"success":totalScore>=30?"warning":undefined}>{totalScore}</Pill>
+      <div className="ma-row ma-gap-xs">
+        <Pill variant={totalScore>=60?"success":totalScore>=30?"warning":undefined}>{totalScore}</Pill>
+        <button className="ma-button--ghost ma-button--sm" style={{border:"none",padding:"0 6px",fontSize:16,cursor:"pointer",background:"none"}} onClick={()=>setDarkMode(d=>!d)} title={darkMode?"Switch to light":"Switch to dark"}>{darkMode?"☀":"☾"}</button>
+      </div>
     </div>
 
     {/* Content */}

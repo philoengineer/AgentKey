@@ -8,16 +8,19 @@
   --ma-bg: #ffffff;
   --ma-bg-subtle: #fafafa;
   --ma-bg-ghost: rgba(250, 250, 250, 0.3);
+  --ma-bg-white: #ffffff;
   --ma-bg-overlay: rgba(255, 255, 255, 0.9);
+  --ma-bg-hover: rgba(250, 250, 250, 0.5);
 
-  --ma-fg: #18181b;
-  --ma-fg-secondary: #3f3f46;
-  --ma-fg-muted: #71717a;
-  --ma-fg-faint: #a1a1aa;
+  --ma-fg: #1f2937;
+  --ma-fg-secondary: #374151;
+  --ma-fg-muted: #6b7280;
+  --ma-fg-faint: #9ca3af;
   --ma-fg-ghost: #d1d5db;
 
   --ma-border: #f3f4f6;
   --ma-border-strong: #e5e7eb;
+  --ma-border-hover: #e5e7eb;
   --ma-border-focus: #9ca3af;
 
   --ma-primary: #3f3f46;
@@ -60,35 +63,41 @@
   --ma-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ma-bg: #09090b;
-    --ma-bg-subtle: #18181b;
-    --ma-bg-ghost: rgba(24, 24, 27, 0.5);
-    --ma-bg-overlay: rgba(9, 9, 11, 0.95);
+/* Dark mode — toggled via .ma-dark class on html element */
+.ma-dark {
+  --ma-bg: #1c1c1e;
+  --ma-bg-subtle: #2c2c2e;
+  --ma-bg-ghost: rgba(44, 44, 46, 0.4);
+  --ma-bg-white: #1c1c1e;
+  --ma-bg-overlay: rgba(28, 28, 30, 0.95);
+  --ma-bg-hover: rgba(44, 44, 46, 0.5);
 
-    --ma-fg: #fafafa;
-    --ma-fg-secondary: #e4e4e7;
-    --ma-fg-muted: #a1a1aa;
-    --ma-fg-faint: #71717a;
-    --ma-fg-ghost: #52525b;
+  --ma-fg: #f5f5f7;
+  --ma-fg-secondary: #d1d1d6;
+  --ma-fg-muted: #98989d;
+  --ma-fg-faint: #6e6e73;
+  --ma-fg-ghost: #48484a;
 
-    --ma-border: #27272a;
-    --ma-border-strong: #3f3f46;
-    --ma-border-focus: #71717a;
+  --ma-border: #2c2c2e;
+  --ma-border-strong: #3a3a3c;
+  --ma-border-hover: #48484a;
+  --ma-border-focus: #8e8e93;
 
-    --ma-primary: #e4e4e7;
-    --ma-primary-hover: #d4d4d8;
-    --ma-primary-fg: #18181b;
+  --ma-primary: #e5e5ea;
+  --ma-primary-hover: #d1d1d6;
+  --ma-primary-fg: #1c1c1e;
 
-    --ma-success-bg: #052e16;
-    --ma-warning-bg: #451a03;
-    --ma-error-bg: #450a0a;
-    --ma-info-bg: #172554;
+  --ma-success: #30d158;
+  --ma-success-bg: rgba(48, 209, 88, 0.12);
+  --ma-warning: #ffd60a;
+  --ma-warning-bg: rgba(255, 214, 10, 0.12);
+  --ma-error: #ff453a;
+  --ma-error-bg: rgba(255, 69, 58, 0.12);
+  --ma-info: #64d2ff;
+  --ma-info-bg: rgba(100, 210, 255, 0.12);
 
-    --ma-shadow-sm: none;
-    --ma-shadow: none;
-  }
+  --ma-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --ma-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* 2. RESET */
