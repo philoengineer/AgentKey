@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 // ═══════════════════════════════════════════════════════════════
-// AgentKey — Human→Agent Delegation Mini App for World
+// Writ — Human→Agent Delegation Mini App for World
 // Ma (間) Design Language — light, spacious, restrained
 // ═══════════════════════════════════════════════════════════════
 
@@ -259,7 +259,7 @@ export default function Writ() {
 
   var doCreateGrant=()=>{
     if(!agentKey)return;
-    var g=createGrant({human:addr,agentKey:agentKey.pub,agentName,appId:"app_agentkey",
+    var g=createGrant({human:addr,agentKey:agentKey.pub,agentName,appId:process.env.NEXT_PUBLIC_APP_ID||"app_writ",
       verStack:achieved.map(id=>({tier:id,lv:T(id).lv})),trustScore:totalScore,highestTier:T(TIERS[hTier]?.id).id,socialScore,
       scopes:selScopes,hours:dHours,maxActions:dActions,ratePerHour:dRate,
       spendPerTx:dSpendPerTx,spendTotal:dSpendTotal,
