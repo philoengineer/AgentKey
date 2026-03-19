@@ -11,6 +11,10 @@ function hash(m){let h=0;for(let i=0;i<m.length;i++)h=((h<<5)-h+m.charCodeAt(i))
 function ago(ts){var d=Date.now()-ts,m=Math.floor(d/60000);if(m<60)return m+"m ago";var h=Math.floor(m/60);if(h<24)return h+"h ago";return Math.floor(h/24)+"d ago";}
 function fmtDate(ts){return new Date(ts).toLocaleDateString("en",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"});}
 
+// ── LOCALSTORAGE HELPERS ──
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v!=null?JSON.parse(v):d;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
 // ── WORLD-NATIVE TIERS ──
 var TIERS=[
   {id:"wallet",  lv:0,label:"Wallet",   letter:"W",color:"var(--ma-fg-muted)",base:5, desc:"World App wallet connected",worldCmd:null},
@@ -153,29 +157,30 @@ export default function AgentKey() {
   // ── Navigation ──
   var [tab,setTab]=useState("home");
   var [subView,setSub]=useState(null);
-  var [darkMode,setDarkMode]=useState(false);
+  var [darkMode,setDarkMode]=useState(()=>lsGet("ak_darkMode",false));
 
-  // ── Theme toggle ──
+  // ── Theme toggle + persist ──
   useEffect(()=>{
     document.documentElement.classList.toggle("ma-dark",darkMode);
+    lsSet("ak_darkMode",darkMode);
   },[darkMode]);
 
   // ── User state ──
-  var [achieved,setAchieved]=useState(["wallet"]);
-  var [addr]=useState(()=>rHex(20));
-  var [username]=useState(()=>"human_"+Math.random().toString(36).slice(2,6));
+  var [achieved,setAchieved]=useState(()=>lsGet("ak_achieved",["wallet"]));
+  var [addr]=useState(()=>{var s=lsGet("ak_addr",null);if(s)return s;var v=rHex(20);lsSet("ak_addr",v);return v;});
+  var [username]=useState(()=>{var s=lsGet("ak_username",null);if(s)return s;var v="human_"+Math.random().toString(36).slice(2,6);lsSet("ak_username",v);return v;});
   var [verifying,setVerifying]=useState(null);
 
   // ── Social ──
-  var [vouches,setVouches]=useState([
+  var [vouches,setVouches]=useState(()=>lsGet("ak_vouches",[
     {from:"alice.eth",tier:"orb",ts:Date.now()-86400000*2},
     {from:"bob_dev",tier:"device",ts:Date.now()-86400000*5},
-  ]);
-  var [outgoing,setOutgoing]=useState([]);
+  ]));
+  var [outgoing,setOutgoing]=useState(()=>lsGet("ak_outgoing",[]));
   var [vouchTarget,setVouchTarget]=useState("");
 
   // ── Agents/Grants ──
-  var [grants,setGrants]=useState([]);
+  var [grants,setGrants]=useState(()=>lsGet("ak_grants",[]));
   var [selectedGrant,setSelectedGrant]=useState(null);
   var [agentName,setAgentName]=useState("");
   var [agentKey,setAgentKey]=useState(null);
@@ -199,6 +204,12 @@ export default function AgentKey() {
   var [dPerScopeLimits,setDPerScopeLimits]=useState({});
   var [showAdvanced,setShowAdvanced]=useState(false);
   var [advSection,setAdvSection]=useState({spending:false,allowlists:false,schedule:false,perScope:false});
+
+  // ── Persist state to localStorage ──
+  useEffect(()=>lsSet("ak_achieved",achieved),[achieved]);
+  useEffect(()=>lsSet("ak_vouches",vouches),[vouches]);
+  useEffect(()=>lsSet("ak_outgoing",outgoing),[outgoing]);
+  useEffect(()=>lsSet("ak_grants",grants),[grants]);
 
   // ── Computed ──
   var hTier=maxTier(achieved);
@@ -277,6 +288,12 @@ export default function AgentKey() {
     setGrants(p=>p.map(x=>{
       if(x.id!==g.id)return x;
       var c=x.grant.constraints;
+
+      // Expiry check
+      if(Date.now()>c.expiresAt){
+        x.auditLog.push({ts:Date.now(),type:"denied",detail:scope+" — grant has expired"});
+        return {...x};
+      }
 
       // Time window check
       if(c.timeWindows){
@@ -681,11 +698,25 @@ export default function AgentKey() {
             {dAllowedDays.length<7&&<><span className="ma-kv-key">Days</span><span className="ma-kv-val">{dAllowedDays.map(d=>DAY_LABELS[d]).join(", ")}</span></>}
           </div>
         </Card>
+        {/* Constraint conflict warnings */}
+        {(dSpendPerTx||dSpendTotal)&&!selScopes.some(s=>s.startsWith("pay:")||s.startsWith("tx:"))&&
+          <div className="ma-alert ma-alert--warning ma-mt-sm">Spending caps set but no financial scopes selected (pay: or tx:). Caps will never trigger.</div>}
+        {dTimeWindowStart&&dTimeWindowEnd&&dTimeWindowStart>=dTimeWindowEnd&&
+          <div className="ma-alert ma-alert--error ma-mt-sm">Schedule error: active-from time must be before active-until time.</div>}
+        {dAllowedDays.length===0&&
+          <div className="ma-alert ma-alert--error ma-mt-sm">No active days selected — the agent will be blocked every day.</div>}
+        {dHours<=0&&
+          <div className="ma-alert ma-alert--error ma-mt-sm">Duration must be greater than 0 hours.</div>}
+        {dActions<=0&&
+          <div className="ma-alert ma-alert--error ma-mt-sm">Max actions must be greater than 0.</div>}
       </Section>
 
       <div className="ma-row ma-gap-sm">
         <Btn v="g" onClick={()=>setCreateStep(0)}>← Back</Btn>
-        <Btn onClick={doCreateGrant} full>Sign and Create Grant</Btn>
+        <Btn onClick={doCreateGrant} full
+          disabled={dHours<=0||dActions<=0||dAllowedDays.length===0||(dTimeWindowStart&&dTimeWindowEnd&&dTimeWindowStart>=dTimeWindowEnd)}>
+          Sign and Create Grant
+        </Btn>
       </div>
     </div>}
   </div>;
@@ -788,6 +819,10 @@ export default function AgentKey() {
           </div>
         </Section>
       </Card>
+
+      {/* Expired notice */}
+      {!g.revocation.revoked&&Date.now()>=g.grant.constraints.expiresAt&&
+        <div className="ma-alert ma-alert--warning ma-mb-sm">This grant expired on {fmtDate(g.grant.constraints.expiresAt)}. No further actions can run.</div>}
 
       {/* Pending approvals */}
       {g.pending.filter(p=>p.status==="pending").length>0&&<Card className="ma-mb-sm ma-card--accent-left" style={{borderLeftColor:"var(--ma-warning)"}}>
